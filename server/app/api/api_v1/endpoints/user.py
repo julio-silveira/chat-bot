@@ -1,6 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm.session import Session
 
 from app.schemas.user import UserResponse, UserCreate
+from app.api import deps
 
 router = APIRouter()
 
@@ -14,7 +16,9 @@ async def get_users():
              response_model=UserResponse,
              name="users:login",
              status_code=200)
-async def login(user: UserCreate):
+async def login(
+                db: Session = Depends(deps.get_db),
+                user: UserCreate = Depends()):
     username = user.username
     password = user.password
 
