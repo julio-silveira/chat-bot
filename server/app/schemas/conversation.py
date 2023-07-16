@@ -12,6 +12,18 @@ class ConversationBase(BaseModel):
     user_id: int
 
 
+class ConversationCreate(ConversationBase):
+    user_id: Optional[int]
+    starting_date: Optional[datetime]
+    ending_date: Optional[datetime]
+
+
+class ConversationUpdate(ConversationBase):
+    user_id: Optional[int]
+    starting_date: Optional[datetime]
+    ending_date: Optional[datetime]
+
+
 class ConversationResponse(ConversationBase):
     id: int
     starting_date: Optional[datetime]
@@ -23,5 +35,5 @@ class ConversationResponse(ConversationBase):
 class ConversationInDb(ConversationBase):
     id: int
     starting_date: datetime
-    ending_date: datetime
-    user_id: int
+    ending_date: Optional[datetime]
+    user_id: Optional[int]
