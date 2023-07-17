@@ -8,6 +8,7 @@ import theme from '@/theme'
 import { queryClient } from '@/services'
 
 import 'react-toastify/dist/ReactToastify.css';
+import { ChatBot } from './components';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <RouterProvider router={router}/>
+          <ChatBot />
           <ToastContainer />
         </ThemeProvider>
       </QueryClientProvider>
