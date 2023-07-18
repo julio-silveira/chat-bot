@@ -8,7 +8,6 @@ interface ProviderProps {
 
 
 export function DialogProvider({ children }: ProviderProps) {
-  const [isOpen, setIsOpen] = useState(false)
   const [chatMessages, setChatMessages] = useState<LocalMessage[]>(Array<LocalMessage>())
 
   const addNewChatMessage = (newMessage: LocalMessage) => {

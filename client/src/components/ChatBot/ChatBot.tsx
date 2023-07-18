@@ -1,4 +1,4 @@
-import { Box, Collapse, Stack } from '@mui/material';
+import { Box, Collapse, Divider, Stack } from '@mui/material';
 import { useState } from 'react';
 import ToggleChatBtn from './components/ToggleChatBtn';
 import ChatMessages from './components/ChatMessages';
@@ -20,11 +20,13 @@ export default function ChatBot() {
         in={isOpen}
       >
         <Stack
-          spacing={1}
+          spacing={0.5}
           sx={{p: 1, border: '2px solid #E0E0E0',
           borderTop: 'none', width: '95%'}}
         >
+          <Divider />
           <ChatMessages />
+          <Divider />
           <ChatInput />
         </Stack>
       </Collapse>

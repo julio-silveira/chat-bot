@@ -4,8 +4,8 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from app.schemas.conversation import ConversationResponse
 from app.schemas.user import UserResponse
+from app.schemas.message import MessageResponse
 
 
 class ConversationBase(BaseModel):
@@ -29,7 +29,7 @@ class ConversationResponse(ConversationBase):
     starting_date: Optional[datetime]
     ending_date: Optional[datetime]
     user: Optional[UserResponse]
-    conversation: List[ConversationResponse]
+    messages: List[MessageResponse]
 
 
 class ConversationInDb(ConversationBase):
@@ -37,3 +37,6 @@ class ConversationInDb(ConversationBase):
     starting_date: datetime
     ending_date: Optional[datetime]
     user_id: Optional[int]
+
+    class Config:
+        orm_mode = True
