@@ -16,39 +16,49 @@ router = APIRouter()
              response_model=MessageResponse,
              name="message:create",
              status_code=200)
-async def create(
-                db: Session = Depends(deps.get_db),
-                message: MessageCreateRequest = Depends()):
+def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
     request_message = message.request_message
-    request_time = message.request_time
+    request_time = datetime.strptime(message.request_time,
+                                     "%Y-%m-%dT%H:%M:%S.%f%z")
     conversation_id = message.conversation_id
     authentication_stage = message.authentication_stage
     next_authentication_stage = None
 
     if not conversation_id:
         new_conversation: ConversationInDb = conversation\
-            .create(db, ConversationCreate(starting_date=request_time,))
+            .create(db=db,
+                    conversation=ConversationCreate(user_id=None,
+                                                    starting_date=request_time,
+                                                    ending_date=None))
         conversation_id = new_conversation.id
         next_authentication_stage = AUTHENTICATION_STAGE.USER.value
 
     if authentication_stage:
         next_authentication_stage = authentication_stage + 1
 
-    new_message = messages.create(db, MessageCreate(
+    response_time = datetime.now()
+
+    new_message = messages.create(db=db, message=MessageCreate(
         request_message=request_message,
         response_message="placeholder",
         request_time=request_time,
-        response_time=datetime.now(),
+        response_time=response_time,
         conversation_id=conversation_id,
     ))
 
-    return MessageResponse(
+    iso_request_time = request_time.isoformat()
+    iso_response_time = response_time.isoformat()
+
+    response = MessageResponse(
         id=new_message.id,
-        request_message=new_message.request_message,
+        request_message=request_message,
         response_message=new_message.response_message,
-        request_time=new_message.request_time,
-        response_time=new_message.response_time,
+        request_time=iso_request_time,
+        response_time=iso_response_time,
+        response_type=0,
         conversation_id=new_message.conversation_id,
         next_authentication_stage=next_authentication_stage,
         access_token=None,
     )
+
+    return response

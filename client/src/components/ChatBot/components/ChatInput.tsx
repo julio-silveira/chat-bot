@@ -5,7 +5,7 @@ import { ChatBotContext } from '@/contexts';
 
 
 export default function ChatInput()  {
-  const {addNewChatMessage} = useContext(ChatBotContext)
+  const {sendMessageToBot} = useContext(ChatBotContext)
 
   const [message, setMessage] = useState<string>();
 
@@ -16,7 +16,7 @@ export default function ChatInput()  {
   const submitMessage = (event: FormEvent) => {
     event.preventDefault()
     if (message && message.trim() !== '') {
-      addNewChatMessage({content: message, time: new Date(), type: 'request'});
+      sendMessageToBot(message);
       setMessage('');
     }
   };

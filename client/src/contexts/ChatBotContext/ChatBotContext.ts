@@ -3,7 +3,8 @@ import { createContext } from 'react'
 
 export type ChatBotContextData = {
   chatMessages: LocalMessage[],
-  addNewChatMessage: (message: LocalMessage) => void,
+  sendMessageToBot: (message: string) => void,
+  awaitingResponse: boolean,
 }
 const ChatBotContext = createContext({} as ChatBotContextData)
 

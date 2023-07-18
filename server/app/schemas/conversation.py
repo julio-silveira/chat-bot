@@ -1,19 +1,18 @@
+from app.schemas.user import UserResponse
+from app.schemas.message import MessageResponse
+
 from typing import List, Optional
 
 from datetime import datetime
 
 from pydantic import BaseModel
 
-from app.schemas.user import UserResponse
-from app.schemas.message import MessageResponse
-
 
 class ConversationBase(BaseModel):
-    user_id: int
+    user_id: Optional[int]
 
 
 class ConversationCreate(ConversationBase):
-    user_id: Optional[int]
     starting_date: Optional[datetime]
     ending_date: Optional[datetime]
 

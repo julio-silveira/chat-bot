@@ -5,7 +5,6 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.models.authentication_stage_enum import AUTHENTICATION_STAGE
-from app.models.response_message_type_enum import RESPONSE_TYPE
 
 
 class MessageBase(BaseModel):
@@ -14,7 +13,7 @@ class MessageBase(BaseModel):
 
 class MessageCreateRequest(MessageBase):
     request_message: str
-    request_time: datetime
+    request_time: str
     conversation_id: Optional[int]
     authentication_stage: Optional[AUTHENTICATION_STAGE]
 
@@ -31,11 +30,11 @@ class MessageResponse(MessageBase):
     id: int
     request_message: str
     response_message: str
-    request_time: datetime
-    response_time: datetime
-    response_type: RESPONSE_TYPE
+    request_time: str
+    response_time: str
+    response_type: int
     conversation_id: int
-    next_authentication_stage: Optional[AUTHENTICATION_STAGE]
+    next_authentication_stage: Optional[int]
     access_token: Optional[str]
 
 
