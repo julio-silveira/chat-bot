@@ -1,7 +1,8 @@
-import { Box, Collapse, Stack, TextField } from '@mui/material';
+import { Box, Collapse, Stack } from '@mui/material';
 import { useState } from 'react';
 import ToggleChatBtn from './components/ToggleChatBtn';
 import ChatMessages from './components/ChatMessages';
+import ChatInput from './components/ChatInput';
 
 
 export type Message = {
@@ -57,10 +58,18 @@ export default function ChatBot() {
   return (
     <Box sx={{position: 'absolute', right: 0, bottom: 0, overflow: 'hidden', width: {xs: '100%', md: 400}}}>
       <ToggleChatBtn toggleModal={toggleModal} />
-      <Collapse mountOnEnter unmountOnExit in={isOpen}>
-        <Stack spacing={1} sx={{p: 1, border: '2px solid #E0E0E0', borderTop: 'none', width: '95%'}} >
+      <Collapse
+        mountOnEnter
+        unmountOnExit
+        in={isOpen}
+      >
+        <Stack
+          spacing={1}
+          sx={{p: 1, border: '2px solid #E0E0E0',
+          borderTop: 'none', width: '95%'}}
+        >
           <ChatMessages messages={messages} />
-          <TextField fullWidth size='small' />
+          <ChatInput onSendMessage={(message: string) =>  console.log(message)} />
         </Stack>
       </Collapse>
     </Box>
