@@ -1,12 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent, useContext } from 'react';
 import { TextField, IconButton, Stack } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { ChatBotContext } from '@/contexts';
 
-interface Props {
-  onSendMessage: (message: string) => void;
-}
 
-export default function ChatInput({ onSendMessage }: Props)  {
+export default function ChatInput()  {
+  const {addNewChatMessage} = useContext(ChatBotContext)
+
   const [message, setMessage] = useState<string>();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +16,7 @@ export default function ChatInput({ onSendMessage }: Props)  {
   const submitMessage = (event: FormEvent) => {
     event.preventDefault()
     if (message && message.trim() !== '') {
-      onSendMessage(message);
+      addNewChatMessage({content: message, time: new Date(), type: 'request'});
       setMessage('');
     }
   };

@@ -1,16 +1,16 @@
 import { Stack } from '@mui/material';
-import { Message } from '../ChatBot';
 import MessageContent from './MessageContent';
+import { useContext } from 'react';
+import { ChatBotContext } from '@/contexts';
 
-type Props = {
-  messages: Message[];
-}
 
-export default function ChatMessages({messages}: Props) {
+export default function ChatMessages() {
+  const {chatMessages} = useContext(ChatBotContext)
+
   return (
     <Stack sx={{height: 300, overflowX: 'hidden', overflowY: 'scroll', px: 1}} spacing={2}>
-      {messages.map((message) => (
-        <MessageContent key={message.id} message={message} />
+      {chatMessages.map((message, index) => (
+        <MessageContent key={index} message={message} />
       ))}
     </Stack>
   )

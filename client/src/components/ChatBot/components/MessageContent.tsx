@@ -1,13 +1,13 @@
 import { Avatar, Stack, Typography } from '@mui/material';
-import { Message } from '../ChatBot';
+import { LocalMessage } from '@/services/http';
 
 type Props =  {
-  message: Message;
+  message: LocalMessage;
 }
 
 export default function MessageContent({message}: Props ) {
 
-  const received  = message.sender === 'bot';
+  const received  = message.type === 'response';
   return(
     <Stack
       spacing={1}
@@ -28,11 +28,11 @@ export default function MessageContent({message}: Props ) {
           width: '95%',
         }}
       >
-        <Avatar sx={{bgcolor: 'primary.main'}} >{message.sender[0].toUpperCase()}</Avatar>
-        <Typography sx={{ wordBreak: "break-word"}}>{message.message} </Typography>
+        <Avatar sx={{bgcolor: 'primary.main'}} >{received ?  'B' : 'U' }</Avatar>
+        <Typography sx={{ wordBreak: "break-word"}}>{message.content} </Typography>
       </Stack>
       <Typography alignSelf="flex-end" sx={{fontSize: 10}} variant='subtitle2'>
-        {message.date.toLocaleTimeString(
+        {message.time.toLocaleTimeString(
             navigator.language,
             { hour: '2-digit', minute: '2-digit', second: '2-digit'}
           )
