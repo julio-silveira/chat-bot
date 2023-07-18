@@ -14,7 +14,7 @@ export default function ToggleChatBtn({toggleModal}: Props) {
       spacing={1}
       borderRadius="12px 12px 0 0 "
       sx={{
-        border: '2px solid #f2f2f2',
+        border: '2px solid #E0E0E0',
         borderBottom: 'none',
         width: '95%',
         bgcolor: 'primary.main',
