@@ -18,9 +18,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <ChatBotProvider>
-            <RouterProvider router={router}/>
-            <ChatBot />
-            <ToastContainer />
+              <RouterProvider router={router}/>
+              <ChatBot />
+              <ToastContainer />
           </ChatBotProvider>
         </ThemeProvider>
       </QueryClientProvider>
