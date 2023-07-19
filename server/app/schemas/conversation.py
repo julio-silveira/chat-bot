@@ -1,15 +1,26 @@
+from app.schemas.user import UserResponse
+from app.schemas.message import MessageResponse
+
 from typing import List, Optional
 
 from datetime import datetime
 
 from pydantic import BaseModel
 
-from app.schemas.conversation import ConversationResponse
-from app.schemas.user import UserResponse
-
 
 class ConversationBase(BaseModel):
-    user_id: int
+    user_id: Optional[int]
+
+
+class ConversationCreate(ConversationBase):
+    starting_date: Optional[datetime]
+    ending_date: Optional[datetime]
+
+
+class ConversationUpdate(ConversationBase):
+    user_id: Optional[int]
+    starting_date: Optional[datetime]
+    ending_date: Optional[datetime]
 
 
 class ConversationResponse(ConversationBase):
@@ -17,11 +28,14 @@ class ConversationResponse(ConversationBase):
     starting_date: Optional[datetime]
     ending_date: Optional[datetime]
     user: Optional[UserResponse]
-    conversation: List[ConversationResponse]
+    messages: List[MessageResponse]
 
 
 class ConversationInDb(ConversationBase):
     id: int
     starting_date: datetime
-    ending_date: datetime
-    user_id: int
+    ending_date: Optional[datetime]
+    user_id: Optional[int]
+
+    class Config:
+        from_attributes = True

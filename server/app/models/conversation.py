@@ -3,6 +3,9 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
+from app.models.user import User # noqa
+from app.models.message import Message # noqa
+
 
 class Conversation(Base):
     id = Column(Integer, primary_key=True, index=True)
