@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { ReactNode, useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import LogoutIcon from '@mui/icons-material/Logout'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -13,6 +13,7 @@ import AppBar from './components/AppBar'
 import ResponsiveDrawer from './components/ResponsiveDrawer'
 import { DrawerHeader, Main } from './styles'
 import bank from '@/assets/bank.png'
+import { ChatBotContext } from '@/contexts'
 
 type Props = {
   children: ReactNode
@@ -21,9 +22,14 @@ type Props = {
 export default function NavBar({ children }: Props) {
   const theme = useTheme()
   const onMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { logout, userId } = useContext(ChatBotContext)
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
-  const handleLogout = () => {}
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   const handleDrawerClose = () => {
     setOpen(false)
@@ -51,11 +57,16 @@ export default function NavBar({ children }: Props) {
             </Link>
           </Stack>
           <Stack direction="row">
-            <IconButton
-              onClick={handleLogout}
-            >
-              <LogoutIcon />
-            </IconButton>
+           {
+              userId ? (
+                <IconButton
+                  onClick={handleLogout}
+                >
+                  <LogoutIcon />
+                </IconButton>
+              )
+              : null
+           }
           </Stack>
         </Toolbar>
       </AppBar>

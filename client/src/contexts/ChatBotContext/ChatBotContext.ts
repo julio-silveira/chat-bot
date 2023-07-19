@@ -5,6 +5,8 @@ export type ChatBotContextData = {
   chatMessages: LocalMessage[],
   sendMessageToBot: (message: string) => void,
   awaitingResponse: boolean,
+  userId: number  | null,
+  logout: () => void,
 }
 const ChatBotContext = createContext({} as ChatBotContextData)
 

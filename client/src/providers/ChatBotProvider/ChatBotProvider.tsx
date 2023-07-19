@@ -13,7 +13,7 @@ export function DialogProvider({ children }: ProviderProps) {
   const [userId, setUserId] = useState<number | null>(null) // TODO: [FUTURE] implement a secure authentication [FUTURE]
   const [authenticationStage, setAuthenticationStage] = useState<AuthenticationStageEnum>(AuthenticationStageEnum.NONE)
   const [chatMessages, setChatMessages] = useState<LocalMessage[]>(Array<LocalMessage>())
-  const {mutate: sendMessage, data: receivedMessage, isLoading: awaitingResponse} = MessageApi.useCreateMessage()
+  const {mutate: sendMessage, data: receivedMessage, isLoading: awaitingResponse, reset: clearMessage} = MessageApi.useCreateMessage()
 
   const sendMessageToBot = async (message: string) => {
     if (awaitingResponse) {
@@ -73,12 +73,22 @@ export function DialogProvider({ children }: ProviderProps) {
     }
   }, [receivedMessage])
 
+  const logout = () => {
+    setConversationId(null)
+    setUserId(null)
+    setAuthenticationStage(AuthenticationStageEnum.NONE)
+    setChatMessages(Array<LocalMessage>())
+    clearMessage()
+  }
+
   return (
     <ChatBotContext.Provider
       value={{
         chatMessages,
         sendMessageToBot,
-        awaitingResponse
+        awaitingResponse,
+        userId,
+        logout
       }}
     >
       {children}
