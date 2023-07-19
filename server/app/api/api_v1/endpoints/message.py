@@ -25,6 +25,7 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
     authentication_stage = message.authentication_stage
     next_authentication_stage = None
     user_id = message.user_id
+    is_finished = False
 
     if not conversation_id:
         is_starting_message = check_is_starting_message(request_message)
@@ -32,11 +33,12 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         if is_starting_message:
             new_conversation: ConversationInDb = conversation\
                 .create(db=db,
-                        conversation=ConversationCreate(user_id=None,
+                        conversation=ConversationCreate(user_id=user_id,
                                                         starting_date=request_time,  # noqa:E501
                                                         ending_date=None))
             conversation_id = new_conversation.id
-            next_authentication_stage = AUTHENTICATION_STAGE.USER.value
+            if not user_id:
+                next_authentication_stage = AUTHENTICATION_STAGE.USER.value
         else:
             response = MessageResponse(
                 id=0,
@@ -47,7 +49,8 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
                 response_type=0,
                 conversation_id=0,
                 next_authentication_stage=0,
-                user_id=None)
+                user_id=None,
+                is_finished=True)
             return response
 
     if authentication_stage == AUTHENTICATION_STAGE.USER.value:
@@ -75,13 +78,14 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
             next_authentication_stage = AUTHENTICATION_STAGE.USER.value
 
     response_time = datetime.now()
-    [response_message, response_type] = get_bot_response(request_message)
+    [response_message, response_type] = get_bot_response(input_text=request_message, is_auth=bool(user_id))  # noqa:E501
 
     if response_type == 2:
         conversation.finish_conversation(db=db,
                                          conversation_id=conversation_id,
                                          ending_date=response_time)
         response_type = 0
+        is_finished = True
 
     new_message = messages.create(db=db, message=MessageCreate(
         request_message=message.request_message,
@@ -104,6 +108,7 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         conversation_id=new_message.conversation_id,
         next_authentication_stage=next_authentication_stage,
         user_id=user_id,
+        is_finished=is_finished
     )
 
     return response

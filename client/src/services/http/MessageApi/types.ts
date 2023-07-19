@@ -25,6 +25,7 @@ export type MessageResponse = {
   conversation_id: number
   next_authentication_stage: AuthenticationStageEnum | null
   user_id: number | null
+  is_finished: boolean | null
 }
 
 export type LocalMessage = {

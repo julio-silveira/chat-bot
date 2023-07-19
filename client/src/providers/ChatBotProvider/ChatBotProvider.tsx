@@ -57,14 +57,16 @@ export function DialogProvider({ children }: ProviderProps) {
       if (receivedMessage.user_id) {
         setUserId(receivedMessage.user_id)
       }
-      console.log(receivedMessage.next_authentication_stage);
-
       if (receivedMessage.next_authentication_stage) {
         setAuthenticationStage(receivedMessage.next_authentication_stage)
       }
 
       if (receivedMessage.response_type === ResponseEnum.OPTIONS) {
         newMessage.isMulti = true
+      }
+
+      if(receivedMessage.is_finished) {
+        setConversationId(null)
       }
 
       addNewChatMessage(newMessage)

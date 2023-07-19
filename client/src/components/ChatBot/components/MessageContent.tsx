@@ -1,5 +1,10 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import { LocalMessage } from '@/services/http';
+import { style } from '../style';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import PersonIcon from '@mui/icons-material/Person';
+import { parseSecret, toHour } from '@/utils/formatters';
+
 
 type Props =  {
   message: LocalMessage;
@@ -11,32 +16,34 @@ export default function MessageContent({message}: Props ) {
   return(
     <Stack
       spacing={1}
-      alignItems='center'
       direction={received ? 'row' : 'row-reverse'}
-      justifyContent='space-between'
+
       p={0.5}
-      sx={{
-        border: '1px solid #E0E0E0',
-        borderRadius: '12px',
-      }}
+      sx={style.singleMessageMainContainer}
     >
       <Stack
         direction={received ? 'row' : 'row-reverse'}
         spacing={1}
-        alignItems="center"
-        sx={{
-          width: '95%',
-        }}
+        sx={style.singleMessageSecondaryContainer}
       >
-        <Avatar sx={{bgcolor: 'primary.main'}} >{received ?  'B' : 'U' }</Avatar>
-        <Typography sx={{ wordBreak: "break-word"}}>{message.content} </Typography>
-      </Stack>
-      <Typography alignSelf="flex-end" sx={{fontSize: 10}} variant='subtitle2'>
-        {message.time.toLocaleTimeString(
-            navigator.language,
-            { hour: '2-digit', minute: '2-digit', second: '2-digit'}
+        <Avatar sx={{bgcolor: 'primary.main'}} >{received ?  <SmartToyIcon /> : <PersonIcon /> }</Avatar>
+        {
+          message.isMulti ? (
+            <Stack>
+              {
+                JSON.parse(message.content).map((content: string, index: number) => (
+                  <Typography key={index} sx={{ wordBreak: "break-word"}}>{content} </Typography>))
+              }
+            </Stack>
+          ) : (
+            <Typography sx={{ wordBreak: "break-word"}}>{parseSecret(message.content, !!message.isSecret)} </Typography>
           )
         }
+
+      </Stack>
+
+      <Typography alignSelf="flex-end" sx={{fontSize: 10}} variant='subtitle2'>
+        {toHour(message.time)}
         </Typography>
     </Stack>
   )

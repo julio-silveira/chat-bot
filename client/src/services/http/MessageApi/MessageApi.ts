@@ -3,11 +3,7 @@ import { MessageRequest, MessageResponse } from '.';
 import { useMutation } from '@tanstack/react-query';
 
 const createMessage = async (message: MessageRequest): Promise<MessageResponse> => {
-    console.log(message);
-
     const { data } = await api.post('/api/v1/message', message);
-    console.log(data);
-
     return data;
 }
 

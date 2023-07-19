@@ -37,6 +37,7 @@ class MessageResponse(MessageBase):
     conversation_id: int
     next_authentication_stage: Optional[int]
     user_id: Optional[int]
+    is_finished: Optional[bool]
 
 
 class MessageInDB(BaseModel):
