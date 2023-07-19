@@ -2,11 +2,10 @@ import { GenericTable, Loading } from '@/components'
 import MainContainer from '@/components/MainContainer/MainContainer'
 import { ChatBotContext } from '@/contexts'
 import { ConversationApi } from '@/services/http'
-import { ConversationToCsv } from '@/utils/csvParser'
-import { Button, List, Typography } from '@mui/material'
+import { toCsv } from '@/utils/csvParser'
+import { Button, Typography } from '@mui/material'
 import { useContext, useEffect } from 'react'
 import { CSVLink } from 'react-csv'
-
 
 
 export default function Loan () {
@@ -29,7 +28,7 @@ export default function Loan () {
               userId
               ? (
               <>
-              <CSVLink     data={data?.map(ConversationToCsv) || [[]]}>
+              <CSVLink data={toCsv(data)}>
                 <Button variant='contained'>
                     Download All Chats
                 </Button>
@@ -40,7 +39,7 @@ export default function Loan () {
                 dataList={data?.map(({user, ending_date}) => (
                   {
                     Username: user.username,
-                    Date: new Date(ending_date).toLocaleDateString()
+                    Date: new Date(ending_date).toLocaleString()
                   }) )  || []} />
               </>
                 )
