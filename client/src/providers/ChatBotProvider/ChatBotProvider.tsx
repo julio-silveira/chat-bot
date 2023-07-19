@@ -9,6 +9,7 @@ interface ProviderProps {
 
 export function DialogProvider({ children }: ProviderProps) {
   const [conversationId, setConversationId] = useState<number | null>(null)
+  const [userId, setUserId] = useState<number | null>(null) // TODO: [FUTURE] implement a secure authentication [FUTURE]
   const [authenticationStage, setAuthenticationStage] = useState<AuthenticationStageEnum>(AuthenticationStageEnum.NONE)
   const [chatMessages, setChatMessages] = useState<LocalMessage[]>(Array<LocalMessage>())
   const {mutate: sendMessage, data: receivedMessage, isLoading: awaitingResponse} = MessageApi.useCreateMessage()
@@ -28,7 +29,8 @@ export function DialogProvider({ children }: ProviderProps) {
       request_message: newMessageObject.content,
       request_time: newMessageObject.time.toISOString(),
       conversation_id: conversationId,
-      authentication_stage: authenticationStage
+      authentication_stage: authenticationStage,
+      user_id: userId
     })
     addNewChatMessage(newMessageObject)
   }
@@ -48,6 +50,10 @@ export function DialogProvider({ children }: ProviderProps) {
       if (receivedMessage.conversation_id) {
         setConversationId(receivedMessage.conversation_id)
       }
+      if (receivedMessage.user_id) {
+        setUserId(receivedMessage.user_id)
+      }
+
       if (receivedMessage.nextAuthentication_stage) {
         setAuthenticationStage(receivedMessage.nextAuthentication_stage)
       }

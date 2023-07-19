@@ -16,6 +16,7 @@ class MessageCreateRequest(MessageBase):
     request_time: str
     conversation_id: Optional[int]
     authentication_stage: Optional[AUTHENTICATION_STAGE]
+    user_id: Optional[int]
 
 
 class MessageCreate(MessageBase):
@@ -35,7 +36,7 @@ class MessageResponse(MessageBase):
     response_type: int
     conversation_id: int
     next_authentication_stage: Optional[int]
-    access_token: Optional[str]
+    user_id: Optional[int]
 
 
 class MessageInDB(BaseModel):

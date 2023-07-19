@@ -24,7 +24,7 @@ export type MessageResponse = {
   response_type: ResponseEnum
   conversation_id: number
   nextAuthentication_stage: AuthenticationStageEnum | null
-  access_token: string | null
+  user_id: number | null
 }
 
 export type LocalMessage = {
@@ -40,4 +40,5 @@ export type MessageRequest = {
   request_time: string
   conversation_id: number | null
   authentication_stage:  AuthenticationStageEnum | null
+  user_id: number | null
 }

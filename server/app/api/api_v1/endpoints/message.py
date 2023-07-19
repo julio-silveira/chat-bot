@@ -24,6 +24,7 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
     conversation_id = message.conversation_id
     authentication_stage = message.authentication_stage
     next_authentication_stage = None
+    user_id = message.user_id
 
     if not conversation_id:
         new_conversation: ConversationInDb = conversation\
@@ -38,7 +39,6 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         next_authentication_stage = authentication_stage + 1
 
     if authentication_stage == AUTHENTICATION_STAGE.USER.value:
-
         next_authentication_stage = AUTHENTICATION_STAGE.PASSWORD.value
 
     response_time = datetime.now()
@@ -64,7 +64,7 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         response_type=response_type,
         conversation_id=new_message.conversation_id,
         next_authentication_stage=next_authentication_stage,
-        access_token=None,
+        user_id=user_id,
     )
 
     return response
