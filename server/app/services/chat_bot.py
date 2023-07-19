@@ -31,7 +31,7 @@ messages = [
     },
     {
         "request": ['a', 'apply'],
-        "response": 'Please fill out the form on "loans" page.',
+        "response": 'Please fill out the form on "loan" page.',
         "response_type": 0
 
     },
