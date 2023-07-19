@@ -5,7 +5,7 @@ from datetime import datetime
 from app.schemas.message import MessageResponse, MessageCreate,  MessageCreateRequest  # noqa:E501
 from app.schemas.conversation import ConversationInDb, ConversationCreate
 from app.api import deps
-from app.services import messages, conversation
+from app.services import messages, conversation, users
 from app.models.authentication_stage_enum import AUTHENTICATION_STAGE
 from app.services.chat_bot import get_bot_response
 
@@ -35,14 +35,38 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         conversation_id = new_conversation.id
         next_authentication_stage = AUTHENTICATION_STAGE.USER.value
 
-    if authentication_stage:
-        next_authentication_stage = authentication_stage + 1
-
     if authentication_stage == AUTHENTICATION_STAGE.USER.value:
+        request_message = 'username'
         next_authentication_stage = AUTHENTICATION_STAGE.PASSWORD.value
+
+    if authentication_stage == AUTHENTICATION_STAGE.PASSWORD.value:
+        username = messages.get_last_message(db=db,
+                                             conversation_id=conversation_id)\
+                                                .request_message
+        user = users.check_user(db=db,
+                                username=username,
+                                password=request_message)
+
+        if user:
+            user_id = user.id
+            conversation.add_user(db=db,
+                                  user_id=user_id,
+                                  conversation_id=conversation_id)
+            request_message = 'right-password'
+            next_authentication_stage = AUTHENTICATION_STAGE.FINISHED.value
+
+        else:
+            request_message = 'wrong-password'
+            next_authentication_stage = AUTHENTICATION_STAGE.USER.value
 
     response_time = datetime.now()
     [response_message, response_type] = get_bot_response(request_message)
+
+    if response_type == 2:
+        conversation.finish_conversation(db=db,
+                                         conversation_id=conversation_id,
+                                         ending_date=response_time)
+        response_type = 0
 
     new_message = messages.create(db=db, message=MessageCreate(
         request_message=message.request_message,

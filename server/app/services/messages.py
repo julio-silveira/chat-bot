@@ -15,3 +15,9 @@ def create(db: Session, message: MessageCreate):
     db.commit()
     db.refresh(db_obj)
     return db_obj
+
+
+def get_last_message(db: Session, conversation_id: int):
+    return db.query(Message)\
+        .filter(Message.conversation_id == conversation_id)\
+        .order_by(Message.id.desc()).first()

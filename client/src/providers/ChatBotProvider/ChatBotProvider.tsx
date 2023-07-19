@@ -1,6 +1,7 @@
 import { ChatBotContext } from '@/contexts'
 import { AuthenticationStageEnum, LocalMessage, MessageApi, ResponseEnum } from '@/services/http'
 import { ReactNode, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 interface ProviderProps {
   children: ReactNode
@@ -15,7 +16,10 @@ export function DialogProvider({ children }: ProviderProps) {
   const {mutate: sendMessage, data: receivedMessage, isLoading: awaitingResponse} = MessageApi.useCreateMessage()
 
   const sendMessageToBot = async (message: string) => {
-
+    if (awaitingResponse) {
+      toast.error('Please wait for the bot to respond')
+      return
+    }
     const isSecret = authenticationStage === AuthenticationStageEnum.PASSWORD
 
     const newMessageObject: LocalMessage = {
@@ -53,9 +57,10 @@ export function DialogProvider({ children }: ProviderProps) {
       if (receivedMessage.user_id) {
         setUserId(receivedMessage.user_id)
       }
+      console.log(receivedMessage.next_authentication_stage);
 
-      if (receivedMessage.nextAuthentication_stage) {
-        setAuthenticationStage(receivedMessage.nextAuthentication_stage)
+      if (receivedMessage.next_authentication_stage) {
+        setAuthenticationStage(receivedMessage.next_authentication_stage)
       }
 
       if (receivedMessage.response_type === ResponseEnum.OPTIONS) {

@@ -23,7 +23,7 @@ export type MessageResponse = {
   response_time: Date
   response_type: ResponseEnum
   conversation_id: number
-  nextAuthentication_stage: AuthenticationStageEnum | null
+  next_authentication_stage: AuthenticationStageEnum | null
   user_id: number | null
 }
 

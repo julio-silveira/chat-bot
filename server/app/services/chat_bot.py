@@ -20,7 +20,7 @@ messages = [
     },
     {
         "request": ['wrong-password'],
-        "response": 'Sorry, your password is wrong, please try again',
+        "response": 'Sorry, your username or password is wrong, please try again or create a new account', # noqa
         "response_type": 0
     },
     {
@@ -30,13 +30,13 @@ messages = [
     },
     {
         "request": ['a', 'apply'],
-        "response": 'Please fill out the form',
+        "response": 'Please fill out the form on "loans" page',
         "response_type": 0
 
     },
     {
         "request": ['b', 'conditions'],
-        "response": 'The loan conditions are...',
+        "response": f"Loan conditions: 1. Loan amount: 1000-10000$, 2. Loan term: 1-5 years, 3. Interest rate: 5-10%", # noqa
         "response_type": 0
     },
     {
@@ -47,7 +47,7 @@ messages = [
     {
         "request": ['bye', 'goodbye'],
         "response": 'Bye, have a nice day!',
-        "response_type": 0
+        "response_type": 2
     }
 ]
 
