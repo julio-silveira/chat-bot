@@ -1,4 +1,3 @@
-import Button from '@mui/material/Button'
 import MainContainer from '@/components/MainContainer/MainContainer'
 import { Stack, Typography } from '@mui/material'
 import { useContext } from 'react'
@@ -17,7 +16,6 @@ export default function Home () {
                   <Typography color="secondary" >Don't have account? </Typography>
                   <CreateAccountDialog />
                 </Stack>
-
               ): null
             }
         </MainContainer>
