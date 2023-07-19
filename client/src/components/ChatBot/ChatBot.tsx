@@ -1,4 +1,4 @@
-import { Box, Collapse, Divider, Stack } from '@mui/material';
+import { Collapse, Divider, Paper, Stack } from '@mui/material';
 import { useState } from 'react';
 import ToggleChatBtn from './components/ToggleChatBtn';
 import ChatMessages from './components/ChatMessages';
@@ -13,7 +13,7 @@ export default function ChatBot() {
   }
 
   return (
-    <Box sx={style.chatBot}>
+    <Paper sx={style.chatBot}>
       <ToggleChatBtn toggleModal={toggleModal} />
       <Collapse
         mountOnEnter
@@ -30,6 +30,6 @@ export default function ChatBot() {
           <ChatInput />
         </Stack>
       </Collapse>
-    </Box>
+    </Paper>
     )
 }

@@ -1,3 +1,4 @@
+import CssBaseline from "@mui/material/CssBaseline";
 import { Container, ThemeProvider } from '@mui/material'
 import { RouterProvider } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
@@ -17,10 +18,11 @@ function App() {
     <Container>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <ChatBotProvider>
-              <RouterProvider router={router}/>
-              <ChatBot />
-              <ToastContainer />
+          <CssBaseline />
+            <ChatBotProvider>
+                <RouterProvider router={router}/>
+                <ChatBot />
+                <ToastContainer />
           </ChatBotProvider>
         </ThemeProvider>
       </QueryClientProvider>

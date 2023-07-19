@@ -26,7 +26,7 @@ export default function ToggleChatBtn({toggleModal}: Props) {
       onClick={toggleModal}
     >
       <ChatIcon sx={{color: 'white'}} />
-      <Typography sx={{fontWeight: 'bold', color: 'white'}} variant='h6'>CHAT</Typography>
+      <Typography sx={{ color: 'white'}} variant='h6'>CHAT</Typography>
     </Stack>
   )
 }

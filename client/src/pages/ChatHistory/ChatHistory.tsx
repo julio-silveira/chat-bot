@@ -1,17 +1,49 @@
+import { GenericTable, Loading } from '@/components'
 import MainContainer from '@/components/MainContainer/MainContainer'
 import { ChatBotContext } from '@/contexts'
-import { Typography } from '@mui/material'
-import { useContext } from 'react'
+import { ConversationApi } from '@/services/http'
+import { ConversationToCsv } from '@/utils/csvParser'
+import { Button, List, Typography } from '@mui/material'
+import { useContext, useEffect } from 'react'
+import { CSVLink } from 'react-csv'
+
 
 
 export default function Loan () {
   const {userId} = useContext(ChatBotContext)
+  const {mutate,data, isLoading} = ConversationApi.useGetConversations()
+
+  useEffect(() => {
+    if (userId) {
+      mutate(userId)
+    }
+  }, [userId])
+
+
+  if (isLoading) return <Loading />
+
     return (
         <MainContainer>
-            <Typography pt={2} color="primary" variant='h5'>Chat History</Typography>
+            <Typography py={2} color="primary" variant='h5'>Chat History</Typography>
             {
               userId
-              ? (null)
+              ? (
+              <>
+              <CSVLink     data={data?.map(ConversationToCsv) || [[]]}>
+                <Button variant='contained'>
+                    Download All Chats
+                </Button>
+              </CSVLink>
+
+              <GenericTable
+                loading={isLoading}
+                dataList={data?.map(({user, ending_date}) => (
+                  {
+                    Username: user.username,
+                    Date: new Date(ending_date).toLocaleDateString()
+                  }) )  || []} />
+              </>
+                )
               : (<Typography pt={2} color="secondary" variant='h6'>Please login first</Typography>)
             }
         </MainContainer>

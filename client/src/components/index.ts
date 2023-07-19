@@ -1,1 +1,5 @@
 export * from './ChatBot'
+export * from './Loading'
+export * from './NavBar'
+export * from './GenericTable'
+export * from './MainContainer'
