@@ -45,7 +45,12 @@ def get_user_finished_conversation(
         user_id: int) -> List[ConversationInDb]:
     conversations = db.query(Conversation)\
         .options(joinedload(Conversation.messages))\
+        .options(joinedload(Conversation.user))\
         .filter(Conversation.user_id == user_id)\
         .filter(Conversation.ending_date.isnot(None)).all()
+
+    for conversation in conversations:
+        if conversation.user.password:
+            del conversation.user.password
 
     return conversations
