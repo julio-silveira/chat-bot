@@ -16,7 +16,7 @@ messages = [
     },
     {
         "request": ['right-password'],
-        "response": 'Welcome to our bank, how can I help you?!',
+        "response": 'Welcome to our bank, how can I help you? Type "loan" for more information!', # noqa
         "response_type": 0
     },
     {
@@ -26,7 +26,7 @@ messages = [
     },
     {
         "request": ['loan', 'loans', 'credit', 'credits'],
-        "response": [['a. Do you want to apply for a loan?'], ['b. Loan conditions'], ['c. Help']], # noqa
+        "response": [['a. Do you want to apply for a loan?'], ['b. Loan conditions'], ['c. Help'], ['tip: type the letter associated with the theme']], # noqa
         "response_type": 1
     },
     {
@@ -70,7 +70,7 @@ def get_bot_response(input_text: str, is_auth: bool) -> str:
                 return [json.dumps(response), response_type]
             return [response, message["response_type"]]
 
-    return ["I'm sorry, I can't assist you with that at the moment.", 0]
+    return ['"I"m sorry, I can"t assist you with that at the moment. If you want end the conversation, type "goodbye" ', 0] # noqa
 
 
 def check_is_starting_message(input_text: str) -> bool:
