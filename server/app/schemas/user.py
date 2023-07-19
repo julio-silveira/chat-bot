@@ -16,3 +16,12 @@ class UserResponse(UserBase):
 
     class Config:
         from_attributes = True
+
+
+class UserInDb(UserBase):
+    id: int
+    username: str
+    password: str
+
+    class Config:
+        from_attributes = True
