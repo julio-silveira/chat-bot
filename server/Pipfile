@@ -19,5 +19,4 @@ sqlalchemy-utils = "*"
 python_version = "3.10"
 
 [scripts]
-prod = "bash -c 'alembic upgrade head && uvicorn app.main:app --reload'"
 start = "uvicorn app.main:app --reload"

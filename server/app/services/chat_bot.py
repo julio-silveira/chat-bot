@@ -25,7 +25,7 @@ messages = [
         "response_type": 1
     },
     {
-        "request": ['loan'],
+        "request": ['loan', ['loans', 'credit', 'credits']],
         "response": [['a. Do you want to apply for a loan?'], ['b. Loan conditions'], ['c. Help']], # noqa
         "response_type": 1
     },
