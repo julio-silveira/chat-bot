@@ -7,7 +7,7 @@ from app.schemas.conversation import ConversationInDb, ConversationCreate
 from app.api import deps
 from app.services import messages, conversation, users
 from app.models.authentication_stage_enum import AUTHENTICATION_STAGE
-from app.services.chat_bot import get_bot_response
+from app.services.chat_bot import get_bot_response, check_is_starting_message
 
 
 router = APIRouter()
@@ -27,13 +27,28 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
     user_id = message.user_id
 
     if not conversation_id:
-        new_conversation: ConversationInDb = conversation\
-            .create(db=db,
-                    conversation=ConversationCreate(user_id=None,
-                                                    starting_date=request_time,
-                                                    ending_date=None))
-        conversation_id = new_conversation.id
-        next_authentication_stage = AUTHENTICATION_STAGE.USER.value
+        is_starting_message = check_is_starting_message(request_message)
+
+        if is_starting_message:
+            new_conversation: ConversationInDb = conversation\
+                .create(db=db,
+                        conversation=ConversationCreate(user_id=None,
+                                                        starting_date=request_time,  # noqa:E501
+                                                        ending_date=None))
+            conversation_id = new_conversation.id
+            next_authentication_stage = AUTHENTICATION_STAGE.USER.value
+        else:
+            response = MessageResponse(
+                id=0,
+                request_message=request_message,
+                response_message='Please start a conversation first.',
+                request_time=request_time.isoformat(),
+                response_time=request_time.isoformat(),
+                response_type=0,
+                conversation_id=0,
+                next_authentication_stage=0,
+                user_id=None)
+            return response
 
     if authentication_stage == AUTHENTICATION_STAGE.USER.value:
         request_message = 'username'

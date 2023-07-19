@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/create",
-             name="users:login",
+             name="users:create",
              status_code=200)
 async def create(
                 user: UserCreate,

@@ -64,4 +64,13 @@ def get_bot_response(input_text: str) -> str:
                 return [json.dumps(response), message["response_type"]]
             return [response, message["response_type"]]
 
-    return ["I'm sorry, I didn't understand your request.", 0]
+    return ["I'm sorry, I can't assist you with that at the moment.", 0]
+
+
+def check_is_starting_message(input_text: str) -> bool:
+    input_words = input_text.lower().split()
+
+    starting_messages = messages[0]
+    requests = starting_messages["request"]
+
+    return any(request in input_words for request in requests)

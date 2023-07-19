@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.conversation import Conversation
 from datetime import datetime
+from typing import List
 
 from app.schemas.conversation import ConversationCreate, ConversationInDb
 
@@ -37,3 +38,14 @@ def finish_conversation(db: Session,
     db.commit()
     db.refresh(conversation)
     return conversation
+
+
+def get_user_finished_conversation(
+        db: Session,
+        user_id: int) -> List[ConversationInDb]:
+    conversations = db.query(Conversation)\
+        .options(joinedload(Conversation.messages))\
+        .filter(Conversation.user_id == user_id)\
+        .filter(Conversation.ending_date.isnot(None)).all()
+
+    return conversations
