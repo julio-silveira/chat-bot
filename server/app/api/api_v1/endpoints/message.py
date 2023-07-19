@@ -7,6 +7,7 @@ from app.schemas.conversation import ConversationInDb, ConversationCreate
 from app.api import deps
 from app.services import messages, conversation
 from app.models.authentication_stage_enum import AUTHENTICATION_STAGE
+from app.services.chat_bot import get_bot_response
 
 
 router = APIRouter()
@@ -36,11 +37,16 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
     if authentication_stage:
         next_authentication_stage = authentication_stage + 1
 
+    if authentication_stage == AUTHENTICATION_STAGE.USER.value:
+
+        next_authentication_stage = AUTHENTICATION_STAGE.PASSWORD.value
+
     response_time = datetime.now()
+    [response_message, response_type] = get_bot_response(request_message)
 
     new_message = messages.create(db=db, message=MessageCreate(
-        request_message=request_message,
-        response_message="placeholder",
+        request_message=message.request_message,
+        response_message=response_message,
         request_time=request_time,
         response_time=response_time,
         conversation_id=conversation_id,
@@ -55,7 +61,7 @@ def create(message: MessageCreateRequest, db: Session = Depends(deps.get_db)):
         response_message=new_message.response_message,
         request_time=iso_request_time,
         response_time=iso_response_time,
-        response_type=0,
+        response_type=response_type,
         conversation_id=new_message.conversation_id,
         next_authentication_stage=next_authentication_stage,
         access_token=None,

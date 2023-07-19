@@ -7,7 +7,7 @@ import { ChatBotContext } from '@/contexts';
 export default function ChatInput()  {
   const {sendMessageToBot} = useContext(ChatBotContext)
 
-  const [message, setMessage] = useState<string>();
+  const [message, setMessage] = useState<string>('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
